@@ -1,44 +1,49 @@
-import { HardhatUserConfig } from "hardhat/config";
-import "@nomicfoundation/hardhat-toolbox";
-import "./scripts/deploy"
-require("@nomiclabs/hardhat-waffle");
+
+import { HardhatUserConfig, task } from "hardhat/config";
+import "@nomiclabs/hardhat-etherscan";
+import "@nomiclabs/hardhat-waffle";
+import "@typechain/hardhat";
+import "./scripts/deploy"; // import script verify
 
 
-const POSI_CHAIN_PRIVATE_KEY = "YOUR POSI CHAIN PRIVATE KEY";
-
-module.exports = {
-  solidity: {
-    compilers: [
-      {
-        version: "0.8.8",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 200,
-          },
-        },
-      },
-      {
-        version: "0.8.0",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 200,
-          },
-        },
-      }
-    ]
-  },
+const privateKey = '<ADD_YOUR_PRIVATE_KEY_HERE>'
+const apiKeyEthereum = '<YOUR_API_KEY>' // you can get api key from etherscan.io or bscscan.com
+const config: HardhatUserConfig = {
+  solidity: "0.8.9",
   networks: {
     posichain_testnet: {
-      url: 'https://api.s0.t.posichain.org/',
+      url: "http://api.s0.t.posichain.org",
       chainId: 910000,
-      accounts: [POSI_CHAIN_PRIVATE_KEY]
+      accounts: [privateKey]
     },
     posichain_mainnet: {
-      url: 'https://api.posichain.org',
+      url: "https://api.posichain.org/",
       chainId: 900000,
-      accounts: [POSI_CHAIN_PRIVATE_KEY]
+      accounts: [privateKey]
+
     }
+  },
+  etherscan: {
+    apiKey: apiKeyEthereum,
+    customChains: [
+      {
+        network: "posichain_testnet",
+        chainId: 910000,
+        urls: {
+          apiURL: "https://apex-testnet.posichain.org/contract-verifier/verify", // the api to verify
+          browserURL: "http://explorer-testnet.nonprodposi.com/"
+        }
+      },
+      {
+        network: "posichain_mainnet",
+        chainId: 900000,
+        urls: {
+          apiURL: "https://apex.posichain.org/contract-verifier/verify",
+          browserURL: "https://explorer.posichain.org/"
+        }
+      },
+    ]
   }
 };
+
+export default config;
