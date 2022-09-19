@@ -1,8 +1,6 @@
 
 import { HardhatUserConfig, task } from "hardhat/config";
-import "@nomiclabs/hardhat-etherscan";
-import "@nomiclabs/hardhat-waffle";
-import "@typechain/hardhat";
+import "@nomicfoundation/hardhat-toolbox";
 import "./scripts/deploy"; // import script verify
 
 
@@ -31,7 +29,7 @@ const config: HardhatUserConfig = {
         chainId: 910000,
         urls: {
           apiURL: "https://apex-testnet.posichain.org/contract-verifier/verify", // the api to verify
-          browserURL: "http://explorer-testnet.nonprodposi.com/"
+          browserURL: "https://explorer-testnet.posichain.org/"
         }
       },
       {
